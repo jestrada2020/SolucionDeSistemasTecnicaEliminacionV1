@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller Guiado: Solución de Sistemas de Ecuaciones por Eliminación</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .taller-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            font-size: 1.6rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #3498db;
+            font-size: 1.3rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .ejercicio-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .ejercicio-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .ejercicio-header {
+            background-color: #2980b9;
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ejercicio-content {
+            padding: 20px;
+            display: none;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        .active .ejercicio-content {
+            display: block;
+        }
+        .step {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .concept-box {
+            background-color: #ebf5fb;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+        }
+        .concept-title {
+            font-weight: 600;
+            color: #2980b9;
+            margin-bottom: 5px;
+        }
+        .equation-box {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .original-system {
+            background-color: #e8f8f5;
+            border-left: 4px solid #1abc9c;
+        }
+        .solution-box {
+            background-color: #eafaf1;
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .no-solution {
+            background-color: #fdedec;
+            border-left: 4px solid #e74c3c;
+        }
+        .infinite-solutions {
+            background-color: #ebf5fb;
+            border-left: 4px solid #3498db;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .step-indicator {
+            background-color: #ecf0f1;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .ejercicios-index {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .index-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .ejercicio-link {
+            display: block;
+            padding: 8px 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            color: #2980b9;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .ejercicio-link:hover {
+            background-color: #f5f5f5;
+            color: #3498db;
+        }
+        .index-section {
+            margin-bottom: 20px;
+        }
+        .index-section-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 15px 0 8px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .introduction {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+            z-index: 1000;
+        }
+        .scroll-to-top:hover {
+            background-color: #2980b9;
+        }
+        .scroll-to-top svg {
+            width: 24px;
+            height: 24px;
+        }
+        @media (max-width: 768px) {
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .step-indicator {
+                order: -1;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+        }
+        .mjx-chtml {
+            font-size: 110% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="taller-container">
+        <h1>Taller Guiado: Solución de Sistemas de Ecuaciones por Eliminación</h1>
+        
+        <div class="introduction">
+            <h2>Introducción al Método de Eliminación</h2>
+            <p>Este taller guiado presenta la solución paso a paso de diversos sistemas de ecuaciones utilizando exclusivamente la técnica de eliminación (también conocida como método de Gauss-Jordan). Este método consiste en transformar el sistema original en un sistema equivalente más simple mediante operaciones elementales:</p>
+            <ul class="list-disc ml-6 mt-2">
+                <li>Multiplicar una ecuación por un escalar no nulo</li>
+                <li>Sumar o restar múltiplos de ecuaciones para eliminar variables</li>
+                <li>Intercambiar el orden de las ecuaciones</li>
+            </ul>
+            <p class="mt-4">El objetivo es obtener un sistema escalonado donde podamos identificar fácilmente la solución o determinar si el sistema tiene infinitas soluciones o ninguna solución.</p>
+        </div>
+        
+        <div class="ejercicios-index">
+            <h2 class="index-title">Índice de Ejercicios</h2>
+            
+            <div class="index-section">
+                <div class="index-section-title">Sistemas Lineales 2×2</div>
+                <a href="#ejercicio1" class="ejercicio-link">1. Sistema con solución única: \(x - 4y + 1 = 0\), \(3x + 2y - 1 = 0\)</a>
+                <a href="#ejercicio2" class="ejercicio-link">2. Sistema sin solución: \(x - 2y = 6\), \(-0.5x + y = 1\)</a>
+                <a href="#ejercicio3" class="ejercicio-link">3. Sistema con solución única: \(x - y = 2\), \(x + y = 1\)</a>
+                <a href="#ejercicio4" class="ejercicio-link">4. Sistema con infinitas soluciones: \(-x - 2y = -4\), \(5x + 10y = 20\)</a>
+            </div>
+            
+            <div class="index-section">
+                <div class="index-section-title">Sistemas Lineales 3×3</div>
+                <a href="#ejercicio5" class="ejercicio-link">5. Sistema con solución única: \(x + y - z = 0\), \(x - y + z = 2\), \(2x + y - 4z = -8\)</a>
+                <a href="#ejercicio6" class="ejercicio-link">6. Sistema con solución única: \(x + y + z = 8\), \(x - 2y + z = 4\), \(x + y - z = -4\)</a>
+                <a href="#ejercicio7" class="ejercicio-link">7. Sistema con solución única: \(2x + 6y + z = -2\), \(3x - 4y - z = 2\), \(5x - 2y - 2z = 0\)</a>
+                <a href="#ejercicio8" class="ejercicio-link">8. Sistema sin solución: \(x + 7y - 4z = 1\), \(2x + 3y + z = -3\), \(-x - 18y + 13z = 2\)</a>
+            </div>
+
+            <div class="index-section">
+                <div class="index-section-title">Sistemas Mixtos</div>
+                <a href="#ejercicio9" class="ejercicio-link">9. Sistema con incógnita y: \(2x - z = 12\), \(x + y = 7\), \(5x + 4z = -9\)</a>
+                <a href="#ejercicio10" class="ejercicio-link">10. Sistema con fracciones: \(-x + 3y + 2z = 2\), \(\frac{1}{2}x - \frac{3}{2}y - z = -1\), \(-\frac{1}{3}x + y + \frac{2}{3}z = \frac{2}{3}\)</a>
+            </div>
+
+            <div class="index-section">
+                <div class="index-section-title">Sistemas No Lineales</div>
+                <a href="#ejercicio11" class="ejercicio-link">11. Sistema no lineal simple: \(x = 5\), \(x = y^2\)</a>
+                <a href="#ejercicio12" class="ejercicio-link">12. Sistema no lineal con círculos: \(x^2 + y^2 = 1\), \(x^2 - 4x + y^2 = -3\)</a>
+                <a href="#ejercicio13" class="ejercicio-link">13. Sistema no lineal con producto: \(xy = 3\), \(x + y = 4\)</a>
+            </div>
+        </div>
+
+        <!-- Ejercicio 1 -->
+        <div id="ejercicio1" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio1')">
+                <span>Ejercicio 1: Sistema Lineal 2×2 con Solución Única</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x - 4y + 1 &= 0 \quad (1)\\
+                    3x + 2y - 1 &= 0 \quad (2)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio1-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Reacomodar las ecuaciones para tener los términos con variables a la izquierda</div>
+                        <p>Reorganizamos las ecuaciones para seguir el formato estándar con los términos constantes al lado derecho.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x - 4y &= -1 \quad (1)\\
+                        3x + 2y &= 1 \quad (2)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio1-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar la variable x de la segunda ecuación</div>
+                        <p>Multiplicamos la ecuación (1) por 3 para que el coeficiente de x coincida con el de la ecuación (2), y luego restamos.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        3(x - 4y) &= 3(-1)\\
+                        3x - 12y &= -3 \quad (1')
+                        \end{align}
+                    </div>
+                    <p>Ahora restamos (1') de (2) para eliminar x:</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        (3x + 2y) - (3x - 12y) &= 1 - (-3)\\
+                        3x + 2y - 3x + 12y &= 1 + 3\\
+                        14y &= 4\\
+                        y &= \frac{4}{14} = \frac{2}{7}
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio1-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustitución hacia atrás</div>
+                        <p>Una vez encontrado el valor de y, lo sustituimos en la ecuación (1) para encontrar el valor de x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x - 4y &= -1\\
+                        x - 4\left(\frac{2}{7}\right) &= -1\\
+                        x - \frac{8}{7} &= -1\\
+                        x &= -1 + \frac{8}{7}\\
+                        x &= \frac{-7 + 8}{7} = \frac{1}{7}
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio1-step4" class="step">
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene una única solución:</p>
+                        \begin{align}
+                        (x, y) = \left(\frac{1}{7}, \frac{2}{7}\right)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio1')" id="ejercicio1-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio1-indicator">Paso 1 de 4</div>
+                    <button onclick="nextStep('ejercicio1')" id="ejercicio1-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 2 -->
+        <div id="ejercicio2" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio2')">
+                <span>Ejercicio 2: Sistema Lineal 2×2 Sin Solución</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x - 2y &= 6 \quad (1)\\
+                    -0.5x + y &= 1 \quad (2)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio2-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar fracciones en la segunda ecuación</div>
+                        <p>Multiplicamos la ecuación (2) por 2 para eliminar la fracción.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x - 2y &= 6 \quad (1)\\
+                        2(-0.5x + y) &= 2(1)\\
+                        -x + 2y &= 2 \quad (2')
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio2-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar la variable x</div>
+                        <p>Sumamos las ecuaciones (1) y (2') para eliminar la variable x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (x - 2y) + (-x + 2y) &= 6 + 2\\
+                        0 &= 8
+                        \end{align}
+                    </div>
+                    <p>Obtenemos una contradicción (0 = 8), lo que significa que el sistema no tiene solución.</p>
+                </div>
+                
+                <div id="ejercicio2-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Interpretación geométrica</div>
+                        <p>Geométricamente, este sistema representa dos líneas paralelas en el plano que nunca se intersectan, por lo tanto, no hay puntos en común que satisfagan ambas ecuaciones simultáneamente.</p>
+                    </div>
+                    <div class="solution-box no-solution">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema no tiene solución.</p>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio2')" id="ejercicio2-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio2-indicator">Paso 1 de 3</div>
+                    <button onclick="nextStep('ejercicio2')" id="ejercicio2-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 3 -->
+        <div id="ejercicio3" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio3')">
+                <span>Ejercicio 3: Sistema Lineal 2×2 con Solución Única</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x - y &= 2 \quad (1)\\
+                    x + y &= 1 \quad (2)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio3-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar la variable x mediante suma de ecuaciones</div>
+                        <p>Restamos la ecuación (2) de la ecuación (1) para eliminar la variable x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (x - y) - (x + y) &= 2 - 1\\
+                        x - y - x - y &= 1\\
+                        -2y &= 1\\
+                        y &= -\frac{1}{2}
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio3-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustituir el valor encontrado</div>
+                        <p>Sustituimos el valor de y en la ecuación (2) para encontrar x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x + y &= 1\\
+                        x + \left(-\frac{1}{2}\right) &= 1\\
+                        x &= 1 + \frac{1}{2}\\
+                        x &= \frac{3}{2}
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio3-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Verificación de la solución</div>
+                        <p>Comprobamos que los valores obtenidos satisfacen ambas ecuaciones originales.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Ecuación (1): \(x - y = 2\)</p>
+                        \begin{align}
+                        \frac{3}{2} - \left(-\frac{1}{2}\right) &= \frac{3}{2} + \frac{1}{2} = 2 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (2): \(x + y = 1\)</p>
+                        \begin{align}
+                        \frac{3}{2} + \left(-\frac{1}{2}\right) &= \frac{3}{2} - \frac{1}{2} = 1 \checkmark
+                        \end{align}
+                    </div>
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene una única solución:</p>
+                        \begin{align}
+                        (x, y) = \left(\frac{3}{2}, -\frac{1}{2}\right)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio3')" id="ejercicio3-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio3-indicator">Paso 1 de 3</div>
+                    <button onclick="nextStep('ejercicio3')" id="ejercicio3-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 4 -->
+        <div id="ejercicio4" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio4')">
+                <span>Ejercicio 4: Sistema Lineal 2×2 con Infinitas Soluciones</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    -x - 2y &= -4 \quad (1)\\
+                    5x + 10y &= 20 \quad (2)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio4-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Simplificar la segunda ecuación</div>
+                        <p>Dividimos la ecuación (2) por 5 para simplificar los coeficientes.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        -x - 2y &= -4 \quad (1)\\
+                        \frac{5x + 10y}{5} &= \frac{20}{5}\\
+                        x + 2y &= 4 \quad (2')
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio4-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sumar ecuaciones para eliminar variables</div>
+                        <p>Sumamos las ecuaciones (1) y (2') para eliminar variables.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (-x - 2y) + (x + 2y) &= -4 + 4\\
+                        0 &= 0
+                        \end{align}
+                    </div>
+                    <p>Obtenemos una identidad (0 = 0), lo que significa que las dos ecuaciones son linealmente dependientes y representan la misma recta. Por tanto, el sistema tiene infinitas soluciones.</p>
+                </div>
+                
+                <div id="ejercicio4-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Expresar la solución en forma paramétrica</div>
+                        <p>Podemos expresar la solución en términos de un parámetro. Despejamos x de la ecuación (2').</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x + 2y &= 4\\
+                        x &= 4 - 2y
+                        \end{align}
+                    </div>
+                    <div class="solution-box infinite-solutions">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene infinitas soluciones, que pueden expresarse como:</p>
+                        \begin{align}
+                        \{(x, y) \mid x = 4 - 2y, y \in \mathbb{R}\}
+                        \end{align}
+                        <p>O alternativamente:</p>
+                        \begin{align}
+                        \{(x, y) \mid -x - 2y = -4\}
+                        \end{align}
+                        <p>Geométricamente, todas las soluciones están sobre la recta \(-x - 2y = -4\).</p>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio4')" id="ejercicio4-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio4-indicator">Paso 1 de 3</div>
+                    <button onclick="nextStep('ejercicio4')" id="ejercicio4-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 5 -->
+        <div id="ejercicio5" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio5')">
+                <span>Ejercicio 5: Sistema Lineal 3×3 con Solución Única</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x + y - z &= 0 \quad (1)\\
+                    x - y + z &= 2 \quad (2)\\
+                    2x + y - 4z &= -8 \quad (3)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio5-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar la variable x de las ecuaciones (2) y (3)</div>
+                        <p>Restamos la ecuación (1) de la ecuación (2) para eliminar x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (x - y + z) - (x + y - z) &= 2 - 0\\
+                        -2y + 2z &= 2\\
+                        -y + z &= 1 \quad (4)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio5-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Continuar con la eliminación</div>
+                        <p>Restamos 2 veces la ecuación (1) de la ecuación (3) para eliminar x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (2x + y - 4z) - 2(x + y - z) &= -8 - 0\\
+                        2x + y - 4z - 2x - 2y + 2z &= -8\\
+                        -y - 2z &= -8\\
+                        -y - 2z &= -8 \quad (5)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio5-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Resolver el sistema de ecuaciones resultante</div>
+                        <p>Ahora tenemos un sistema de ecuaciones en y y z con las ecuaciones (4) y (5).</p>
+                        <p>Despejamos y de la ecuación (4):</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        -y + z &= 1\\
+                        y &= z - 1 \quad (6)
+                        \end{align}
+                    </div>
+                    <p>Sustituimos esta expresión en la ecuación (5):</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        -(z - 1) - 2z &= -8\\
+                        -z + 1 - 2z &= -8\\
+                        -3z + 1 &= -8\\
+                        -3z &= -9\\
+                        z &= 3
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio5-step4" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustituir hacia atrás</div>
+                        <p>Con el valor de z, encontramos y utilizando la ecuación (6):</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        y &= z - 1\\
+                        y &= 3 - 1 = 2
+                        \end{align}
+                    </div>
+                    <p>Con los valores de y y z, encontramos x utilizando la ecuación (1):</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        x + y - z &= 0\\
+                        x + 2 - 3 &= 0\\
+                        x &= 1
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio5-step5" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Verificación de la solución</div>
+                        <p>Comprobamos que los valores obtenidos satisfacen las ecuaciones originales.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Ecuación (1): \(x + y - z = 0\)</p>
+                        \begin{align}
+                        1 + 2 - 3 = 0 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (2): \(x - y + z = 2\)</p>
+                        \begin{align}
+                        1 - 2 + 3 = 2 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (3): \(2x + y - 4z = -8\)</p>
+                        \begin{align}
+                        2(1) + 2 - 4(3) = 2 + 2 - 12 = -8 \checkmark
+                        \end{align}
+                    </div>
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene una única solución:</p>
+                        \begin{align}
+                        (x, y, z) = (1, 2, 3)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio5')" id="ejercicio5-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio5-indicator">Paso 1 de 5</div>
+                    <button onclick="nextStep('ejercicio5')" id="ejercicio5-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 6 -->
+        <div id="ejercicio6" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio6')">
+                <span>Ejercicio 6: Sistema Lineal 3×3 con Solución Única</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x + y + z &= 8 \quad (1)\\
+                    x - 2y + z &= 4 \quad (2)\\
+                    x + y - z &= -4 \quad (3)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio6-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar la variable x de las ecuaciones (2) y (3)</div>
+                        <p>Restamos la ecuación (1) de la ecuación (2) para eliminar x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (x - 2y + z) - (x + y + z) &= 4 - 8\\
+                        -3y &= -4\\
+                        y &= \frac{4}{3} \quad (4)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio6-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Continuar con la eliminación</div>
+                        <p>Restamos la ecuación (1) de la ecuación (3) para eliminar x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (x + y - z) - (x + y + z) &= -4 - 8\\
+                        -2z &= -12\\
+                        z &= 6 \quad (5)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio6-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustituir los valores encontrados</div>
+                        <p>Con los valores de y y z, encontramos x utilizando la ecuación (1).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x + y + z &= 8\\
+                        x + \frac{4}{3} + 6 &= 8\\
+                        x &= 8 - \frac{4}{3} - 6\\
+                        x &= 8 - \frac{4}{3} - \frac{18}{3}\\
+                        x &= \frac{24 - 4 - 18}{3}\\
+                        x &= \frac{2}{3}
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio6-step4" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Verificación de la solución</div>
+                        <p>Comprobamos que los valores obtenidos satisfacen las ecuaciones originales.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Ecuación (1): \(x + y + z = 8\)</p>
+                        \begin{align}
+                        \frac{2}{3} + \frac{4}{3} + 6 = \frac{6}{3} + 6 = 2 + 6 = 8 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (2): \(x - 2y + z = 4\)</p>
+                        \begin{align}
+                        \frac{2}{3} - 2\left(\frac{4}{3}\right) + 6 = \frac{2}{3} - \frac{8}{3} + 6 = -2 + 6 = 4 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (3): \(x + y - z = -4\)</p>
+                        \begin{align}
+                        \frac{2}{3} + \frac{4}{3} - 6 = 2 - 6 = -4 \checkmark
+                        \end{align}
+                    </div>
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene una única solución:</p>
+                        \begin{align}
+                        (x, y, z) = \left(\frac{2}{3}, \frac{4}{3}, 6\right)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio6')" id="ejercicio6-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio6-indicator">Paso 1 de 4</div>
+                    <button onclick="nextStep('ejercicio6')" id="ejercicio6-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 7 -->
+        <div id="ejercicio7" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio7')">
+                <span>Ejercicio 7: Sistema Lineal 3×3 con Solución Única</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    2x + 6y + z &= -2 \quad (1)\\
+                    3x - 4y - z &= 2 \quad (2)\\
+                    5x - 2y - 2z &= 0 \quad (3)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio7-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar la variable z</div>
+                        <p>Sumamos las ecuaciones (1) y (2) para eliminar z.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (2x + 6y + z) + (3x - 4y - z) &= -2 + 2\\
+                        5x + 2y &= 0 \quad (4)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio7-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar más variables para simplificar</div>
+                        <p>Sumamos 2 veces la ecuación (2) a la ecuación (3) para eliminar z.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (5x - 2y - 2z) + 2(3x - 4y - z) &= 0 + 2(2)\\
+                        5x - 2y - 2z + 6x - 8y - 2z &= 0 + 4\\
+                        11x - 10y - 4z &= 4 \quad (5)
+                        \end{align}
+                    </div>
+                    <p>Luego, sumamos 2 veces la ecuación (1) a la ecuación (5) para eliminar z.</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        (11x - 10y - 4z) + 2(2x + 6y + z) &= 4 + 2(-2)\\
+                        11x - 10y - 4z + 4x + 12y + 2z &= 4 - 4\\
+                        15x + 2y - 2z &= 0 \quad (6)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio7-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Resolver el sistema resultante</div>
+                        <p>Despejamos y de la ecuación (4).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        5x + 2y &= 0\\
+                        2y &= -5x\\
+                        y &= -\frac{5}{2}x \quad (7)
+                        \end{align}
+                    </div>
+                    <p>Sustituimos esta expresión en la ecuación (6).</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        15x + 2\left(-\frac{5}{2}x\right) - 2z &= 0\\
+                        15x - 5x - 2z &= 0\\
+                        10x - 2z &= 0\\
+                        5x - z &= 0\\
+                        z &= 5x \quad (8)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio7-step4" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustituir en una de las ecuaciones originales</div>
+                        <p>Sustituimos las expresiones (7) y (8) en la ecuación (1).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        2x + 6\left(-\frac{5}{2}x\right) + 5x &= -2\\
+                        2x - 15x + 5x &= -2\\
+                        -8x &= -2\\
+                        x &= \frac{1}{4}
+                        \end{align}
+                    </div>
+                    <p>Con el valor de x, encontramos y usando la ecuación (7):</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        y &= -\frac{5}{2}x\\
+                        y &= -\frac{5}{2}\left(\frac{1}{4}\right)\\
+                        y &= -\frac{5}{8}
+                        \end{align}
+                    </div>
+                    <p>Y encontramos z usando la ecuación (8):</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        z &= 5x\\
+                        z &= 5\left(\frac{1}{4}\right)\\
+                        z &= \frac{5}{4}
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio7-step5" class="step">
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene una única solución:</p>
+                        \begin{align}
+                        (x, y, z) = \left(\frac{1}{4}, -\frac{5}{8}, \frac{5}{4}\right)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio7')" id="ejercicio7-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio7-indicator">Paso 1 de 5</div>
+                    <button onclick="nextStep('ejercicio7')" id="ejercicio7-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ejercicio 8 -->
+        <div id="ejercicio8" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio8')">
+                <span>Ejercicio 8: Sistema Lineal 3×3 Sin Solución</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x + 7y - 4z &= 1 \quad (1)\\
+                    2x + 3y + z &= -3 \quad (2)\\
+                    -x - 18y + 13z &= 2 \quad (3)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio8-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar la variable x</div>
+                        <p>Sumamos la ecuación (1) multiplicada por 2 a la ecuación (2) para eliminar x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        2(x + 7y - 4z) + (2x + 3y + z) &= 2(1) + (-3)\\
+                        2x + 14y - 8z + 2x + 3y + z &= 2 - 3\\
+                        4x + 17y - 7z &= -1 \quad (4)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio8-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Continuar eliminando variables</div>
+                        <p>Sumamos la ecuación (1) a la ecuación (3) para eliminar x.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (x + 7y - 4z) + (-x - 18y + 13z) &= 1 + 2\\
+                        -11y + 9z &= 3 \quad (5)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio8-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Despejar variables en ecuaciones reducidas</div>
+                        <p>Despejamos -11y de la ecuación (5).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        -11y + 9z &= 3\\
+                        -11y &= 3 - 9z \quad (6)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio8-step4" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Usar el método de eliminación para verificar si el sistema es consistente</div>
+                        <p>Multiplicamos la ecuación (1) por 4 y la sumamos a la ecuación (4).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        4(x + 7y - 4z) + (4x + 17y - 7z) &= 4(1) + (-1)\\
+                        4x + 28y - 16z + 4x + 17y - 7z &= 4 - 1\\
+                        8x + 45y - 23z &= 3 \quad (7)
+                        \end{align}
+                    </div>
+                    <p>Ahora multiplicamos la ecuación (5) por -1.</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        -1 \cdot (-11y + 9z) &= -1 \cdot 3\\
+                        11y - 9z &= -3 \quad (8)
+                        \end{align}
+                    </div>
+                    <p>Según las ecuaciones (5) y (8), tenemos:</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        -11y + 9z &= 3 \quad (5)\\
+                        11y - 9z &= -3 \quad (8)
+                        \end{align}
+                    </div>
+                    <p>Si sumamos estas ecuaciones, obtenemos:</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        (-11y + 9z) + (11y - 9z) &= 3 + (-3)\\
+                        0 &= 0
+                        \end{align}
+                    </div>
+                    <p>Esto nos da una identidad (0 = 0), lo que sugiere que las ecuaciones son linealmente dependientes. Necesitamos verificar con la ecuación (7).</p>
+                </div>
+                
+                <div id="ejercicio8-step5" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Verificar la consistencia del sistema completo</div>
+                        <p>Usemos las ecuaciones (7) y (5) para verificar si hay solución.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Expresemos la ecuación (7) en términos de y y z.</p>
+                        <p>De la ecuación (1), podemos despejar x:</p>
+                        \begin{align}
+                        x &= 1 - 7y + 4z
+                        \end{align}
+                        <p>Sustituyendo en la ecuación (7):</p>
+                        \begin{align}
+                        8(1 - 7y + 4z) + 45y - 23z &= 3\\
+                        8 - 56y + 32z + 45y - 23z &= 3\\
+                        8 - 11y + 9z &= 3\\
+                        -11y + 9z &= 3 - 8\\
+                        -11y + 9z &= -5
+                        \end{align}
+                        <p>Pero según la ecuación (5), \(-11y + 9z = 3\). Así que llegamos a una contradicción:</p>
+                        \begin{align}
+                        -11y + 9z &= -5\\
+                        -11y + 9z &= 3
+                        \end{align}
+                        <p>Esta contradicción (\(-5 \neq 3\)) indica que el sistema no tiene solución.</p>
+                    </div>
+                </div>
+                
+                <div id="ejercicio8-step6" class="step">
+                    <div class="solution-box no-solution">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema no tiene solución.</p>
+                        <p>Geométricamente, esto significa que los tres planos representados por las ecuaciones originales no se intersectan en un punto común ni en una línea común.</p>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio8')" id="ejercicio8-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio8-indicator">Paso 1 de 6</div>
+                    <button onclick="nextStep('ejercicio8')" id="ejercicio8-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 9 -->
+        <div id="ejercicio9" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio9')">
+                <span>Ejercicio 9: Sistema con Variable y en una Ecuación Separada</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    2x - z &= 12 \quad (1)\\
+                    x + y &= 7 \quad (2)\\
+                    5x + 4z &= -9 \quad (3)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio9-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Resolver primero las ecuaciones que no contienen y</div>
+                        <p>Notamos que las ecuaciones (1) y (3) forman un sistema 2×2 en las variables x y z. Podemos resolverlo primero.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Para eliminar z, multiplicamos la ecuación (1) por 4 y la sumamos a la ecuación (3).</p>
+                        \begin{align}
+                        4(2x - z) + (5x + 4z) &= 4(12) + (-9)\\
+                        8x - 4z + 5x + 4z &= 48 - 9\\
+                        13x &= 39\\
+                        x &= 3
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio9-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustituir el valor encontrado</div>
+                        <p>Sustituimos el valor de x en la ecuación (1) para encontrar z.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        2x - z &= 12\\
+                        2(3) - z &= 12\\
+                        6 - z &= 12\\
+                        -z &= 6\\
+                        z &= -6
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio9-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Encontrar la variable restante</div>
+                        <p>Con el valor de x, podemos encontrar y usando la ecuación (2).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x + y &= 7\\
+                        3 + y &= 7\\
+                        y &= 4
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio9-step4" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Verificar la solución</div>
+                        <p>Comprobamos que los valores obtenidos satisfacen todas las ecuaciones originales.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Ecuación (1): \(2x - z = 12\)</p>
+                        \begin{align}
+                        2(3) - (-6) = 6 + 6 = 12 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (2): \(x + y = 7\)</p>
+                        \begin{align}
+                        3 + 4 = 7 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (3): \(5x + 4z = -9\)</p>
+                        \begin{align}
+                        5(3) + 4(-6) = 15 - 24 = -9 \checkmark
+                        \end{align}
+                    </div>
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene una única solución:</p>
+                        \begin{align}
+                        (x, y, z) = (3, 4, -6)
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio9')" id="ejercicio9-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio9-indicator">Paso 1 de 4</div>
+                    <button onclick="nextStep('ejercicio9')" id="ejercicio9-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 10 -->
+        <div id="ejercicio10" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio10')">
+                <span>Ejercicio 10: Sistema con Fracciones</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    -x + 3y + 2z &= 2 \quad (1)\\
+                    \frac{1}{2}x - \frac{3}{2}y - z &= -1 \quad (2)\\
+                    -\frac{1}{3}x + y + \frac{2}{3}z &= \frac{2}{3} \quad (3)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio10-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar fracciones multiplicando por el mínimo común múltiplo</div>
+                        <p>Multiplicamos la ecuación (2) por 2 para eliminar el denominador 2.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        2\left(\frac{1}{2}x - \frac{3}{2}y - z\right) &= 2(-1)\\
+                        x - 3y - 2z &= -2 \quad (2')
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio10-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Continuar eliminando fracciones</div>
+                        <p>Multiplicamos la ecuación (3) por 3 para eliminar el denominador 3.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        3\left(-\frac{1}{3}x + y + \frac{2}{3}z\right) &= 3\left(\frac{2}{3}\right)\\
+                        -x + 3y + 2z &= 2 \quad (3')
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio10-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Analizar el sistema resultante</div>
+                        <p>Observamos que las ecuaciones (1), (2') y (3') son:</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        -x + 3y + 2z &= 2 \quad (1)\\
+                        x - 3y - 2z &= -2 \quad (2')\\
+                        -x + 3y + 2z &= 2 \quad (3')
+                        \end{align}
+                    </div>
+                    <p>Notamos que la ecuación (1) y la ecuación (3') son idénticas. Además, la ecuación (2') es igual a la ecuación (1) multiplicada por -1. Esto significa que las tres ecuaciones son linealmente dependientes y representan el mismo plano en el espacio 3D.</p>
+                </div>
+                
+                <div id="ejercicio10-step4" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Determinar el tipo de solución</div>
+                        <p>Cuando las ecuaciones de un sistema son linealmente dependientes y representan el mismo plano, el sistema tiene infinitas soluciones. Estas soluciones pueden expresarse de forma paramétrica.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Podemos expresar una variable en términos de las otras dos. Por ejemplo, despejando x de la ecuación (1):</p>
+                        \begin{align}
+                        -x + 3y + 2z &= 2\\
+                        -x &= 2 - 3y - 2z\\
+                        x &= -2 + 3y + 2z
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio10-step5" class="step">
+                    <div class="solution-box infinite-solutions">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene infinitas soluciones, que pueden expresarse como:</p>
+                        \begin{align}
+                        \{(x, y, z) \mid x = -2 + 3y + 2z, y \in \mathbb{R}, z \in \mathbb{R}\}
+                        \end{align}
+                        <p>O alternativamente:</p>
+                        \begin{align}
+                        \{(x, y, z) \mid -x + 3y + 2z = 2\}
+                        \end{align}
+                        <p>Geométricamente, todas las soluciones están sobre el plano \(-x + 3y + 2z = 2\).</p>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio10')" id="ejercicio10-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio10-indicator">Paso 1 de 5</div>
+                    <button onclick="nextStep('ejercicio10')" id="ejercicio10-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 11 -->
+        <div id="ejercicio11" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio11')">
+                <span>Ejercicio 11: Sistema No Lineal Simple</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x &= 5 \quad (1)\\
+                    x &= y^2 \quad (2)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio11-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Método de sustitución para sistemas no lineales</div>
+                        <p>Para sistemas no lineales, el método de eliminación no se aplica directamente. Podemos usar el método de sustitución.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>La ecuación (1) nos da directamente el valor de x.</p>
+                        \begin{align}
+                        x = 5
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio11-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustitución en ecuaciones no lineales</div>
+                        <p>Sustituimos el valor de x en la ecuación (2) para encontrar y.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x &= y^2\\
+                        5 &= y^2
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio11-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Resolver ecuaciones cuadráticas</div>
+                        <p>Tomamos la raíz cuadrada a ambos lados para resolver para y.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        y^2 &= 5\\
+                        y &= \pm\sqrt{5}
+                        \end{align}
+                    </div>
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene dos soluciones:</p>
+                        \begin{align}
+                        (x, y) = (5, \sqrt{5}) \quad \text{y} \quad (x, y) = (5, -\sqrt{5})
+                        \end{align}
+                        <p>Geométricamente, estas soluciones representan las intersecciones de la línea vertical \(x = 5\) con la parábola \(x = y^2\).</p>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio11')" id="ejercicio11-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio11-indicator">Paso 1 de 3</div>
+                    <button onclick="nextStep('ejercicio11')" id="ejercicio11-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 12 -->
+        <div id="ejercicio12" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio12')">
+                <span>Ejercicio 12: Sistema No Lineal con Círculos</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    x^2 + y^2 &= 1 \quad (1)\\
+                    x^2 - 4x + y^2 &= -3 \quad (2)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio12-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Eliminar términos no lineales combinando ecuaciones</div>
+                        <p>Restamos la ecuación (1) de la ecuación (2) para eliminar los términos cuadráticos \(x^2\) y \(y^2\).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        (x^2 - 4x + y^2) - (x^2 + y^2) &= -3 - 1\\
+                        x^2 - 4x + y^2 - x^2 - y^2 &= -4\\
+                        -4x &= -4\\
+                        x &= 1
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio12-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustituir en una ecuación original</div>
+                        <p>Sustituimos el valor de x en la ecuación (1) para encontrar y.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x^2 + y^2 &= 1\\
+                        (1)^2 + y^2 &= 1\\
+                        1 + y^2 &= 1\\
+                        y^2 &= 0\\
+                        y &= 0
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio12-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Verificar la solución</div>
+                        <p>Comprobamos que los valores obtenidos satisfacen ambas ecuaciones originales.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Ecuación (1): \(x^2 + y^2 = 1\)</p>
+                        \begin{align}
+                        1^2 + 0^2 = 1 \checkmark
+                        \end{align}
+                        
+                        <p>Ecuación (2): \(x^2 - 4x + y^2 = -3\)</p>
+                        \begin{align}
+                        1^2 - 4(1) + 0^2 = 1 - 4 = -3 \checkmark
+                        \end{align}
+                    </div>
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene una única solución:</p>
+                        \begin{align}
+                        (x, y) = (1, 0)
+                        \end{align}
+                        <p>Geométricamente, esta solución representa el punto donde el círculo \(x^2 + y^2 = 1\) intersecta con la circunferencia \(x^2 - 4x + y^2 = -3\) que puede reescribirse como \((x-2)^2 + y^2 = 1\).</p>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio12')" id="ejercicio12-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio12-indicator">Paso 1 de 3</div>
+                    <button onclick="nextStep('ejercicio12')" id="ejercicio12-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 13 -->
+        <div id="ejercicio13" class="ejercicio-card">
+            <div class="ejercicio-header" onclick="toggleEjercicio('ejercicio13')">
+                <span>Ejercicio 13: Sistema No Lineal con Producto</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="ejercicio-content">
+                <div class="equation-box original-system">
+                    <div class="concept-title">Sistema original:</div>
+                    \begin{align}
+                    xy &= 3 \quad (1)\\
+                    x + y &= 4 \quad (2)
+                    \end{align}
+                </div>
+                
+                <div id="ejercicio13-step1" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Combinar ecuaciones lineales y no lineales</div>
+                        <p>La ecuación (1) es no lineal debido al producto xy, mientras que la ecuación (2) es lineal. Podemos despejar una variable de la ecuación lineal.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>De la ecuación (2), despejamos y:</p>
+                        \begin{align}
+                        x + y &= 4\\
+                        y &= 4 - x
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio13-step2" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Sustituir en la ecuación no lineal</div>
+                        <p>Sustituimos la expresión para y en la ecuación (1).</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        xy &= 3\\
+                        x(4 - x) &= 3\\
+                        4x - x^2 &= 3\\
+                        -x^2 + 4x - 3 &= 0
+                        \end{align}
+                    </div>
+                    <p>Multiplicamos por -1 para tener la forma estándar:</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        x^2 - 4x + 3 &= 0
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio13-step3" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Resolver la ecuación cuadrática</div>
+                        <p>Factorizamos el trinomio para encontrar las raíces de la ecuación cuadrática.</p>
+                    </div>
+                    <div class="equation-box">
+                        \begin{align}
+                        x^2 - 4x + 3 &= 0\\
+                        (x - 3)(x - 1) &= 0
+                        \end{align}
+                    </div>
+                    <p>Las soluciones son:</p>
+                    <div class="equation-box">
+                        \begin{align}
+                        x = 3 \quad \text{o} \quad x = 1
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio13-step4" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Encontrar los valores correspondientes</div>
+                        <p>Para cada valor de x, encontramos el valor correspondiente de y usando la ecuación (2).</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Para \(x = 3\):</p>
+                        \begin{align}
+                        y &= 4 - x\\
+                        y &= 4 - 3 = 1
+                        \end{align}
+                        
+                        <p>Para \(x = 1\):</p>
+                        \begin{align}
+                        y &= 4 - x\\
+                        y &= 4 - 1 = 3
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div id="ejercicio13-step5" class="step">
+                    <div class="concept-box">
+                        <div class="concept-title">Concepto: Verificar las soluciones</div>
+                        <p>Comprobamos que ambos pares de valores satisfacen las ecuaciones originales.</p>
+                    </div>
+                    <div class="equation-box">
+                        <p>Para \((x, y) = (3, 1)\):</p>
+                        <p>Ecuación (1): \(xy = 3\)</p>
+                        \begin{align}
+                        3 \times 1 = 3 \checkmark
+                        \end{align}
+                        <p>Ecuación (2): \(x + y = 4\)</p>
+                        \begin{align}
+                        3 + 1 = 4 \checkmark
+                        \end{align}
+                        
+                        <p>Para \((x, y) = (1, 3)\):</p>
+                        <p>Ecuación (1): \(xy = 3\)</p>
+                        \begin{align}
+                        1 \times 3 = 3 \checkmark
+                        \end{align}
+                        <p>Ecuación (2): \(x + y = 4\)</p>
+                        \begin{align}
+                        1 + 3 = 4 \checkmark
+                        \end{align}
+                    </div>
+                    <div class="solution-box">
+                        <div class="concept-title">Solución:</div>
+                        <p>El sistema tiene dos soluciones:</p>
+                        \begin{align}
+                        (x, y) = (3, 1) \quad \text{y} \quad (x, y) = (1, 3)
+                        \end{align}
+                        <p>Geométricamente, estas soluciones representan las intersecciones de la hipérbola \(xy = 3\) con la recta \(x + y = 4\).</p>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button onclick="prevStep('ejercicio13')" id="ejercicio13-prev" disabled>Paso Anterior</button>
+                    <div class="step-indicator" id="ejercicio13-indicator">Paso 1 de 5</div>
+                    <button onclick="nextStep('ejercicio13')" id="ejercicio13-next">Siguiente Paso</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-to-top" onclick="scrollToTop()" title="Volver arriba">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </div>
+        
+    </div>
+
+    <script>
+        // MathJax Config
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]'], ['\\begin{align}', '\\end{align}']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+        
+        // Variables de control para ejercicios y pasos
+        const ejercicios = {
+            ejercicio1: { currentStep: 1, totalSteps: 4 },
+            ejercicio2: { currentStep: 1, totalSteps: 3 },
+            ejercicio3: { currentStep: 1, totalSteps: 3 },
+            ejercicio4: { currentStep: 1, totalSteps: 3 },
+            ejercicio5: { currentStep: 1, totalSteps: 5 },
+            ejercicio6: { currentStep: 1, totalSteps: 4 },
+            ejercicio7: { currentStep: 1, totalSteps: 5 },
+            ejercicio8: { currentStep: 1, totalSteps: 6 },
+            ejercicio9: { currentStep: 1, totalSteps: 4 },
+            ejercicio10: { currentStep: 1, totalSteps: 5 },
+            ejercicio11: { currentStep: 1, totalSteps: 3 },
+            ejercicio12: { currentStep: 1, totalSteps: 3 },
+            ejercicio13: { currentStep: 1, totalSteps: 5 }
+        };
+
+        // Función para mostrar el paso actual de un ejercicio
+        function showCurrentStep(ejercicioId) {
+            const ejercicio = ejercicios[ejercicioId];
+            for (let i = 1; i <= ejercicio.totalSteps; i++) {
+                const step = document.getElementById(`${ejercicioId}-step${i}`);
+                if (i <= ejercicio.currentStep) {
+                    step.style.display = 'block';
+                } else {
+                    step.style.display = 'none';
+                }
+            }
+            
+            // Actualizar el indicador de paso
+            document.getElementById(`${ejercicioId}-indicator`).textContent = `Paso ${ejercicio.currentStep} de ${ejercicio.totalSteps}`;
+            
+            // Actualizar estado de los botones
+            document.getElementById(`${ejercicioId}-prev`).disabled = ejercicio.currentStep === 1;
+            document.getElementById(`${ejercicioId}-next`).disabled = ejercicio.currentStep === ejercicio.totalSteps;
+        }
+
+        // Función para avanzar al siguiente paso
+        function nextStep(ejercicioId) {
+            const ejercicio = ejercicios[ejercicioId];
+            if (ejercicio.currentStep < ejercicio.totalSteps) {
+                ejercicio.currentStep++;
+                showCurrentStep(ejercicioId);
+            }
+        }
+
+        // Función para retroceder al paso anterior
+        function prevStep(ejercicioId) {
+            const ejercicio = ejercicios[ejercicioId];
+            if (ejercicio.currentStep > 1) {
+                ejercicio.currentStep--;
+                showCurrentStep(ejercicioId);
+            }
+        }
+
+        // Función para expandir/contraer un ejercicio
+        function toggleEjercicio(ejercicioId) {
+            const ejercicioEl = document.getElementById(ejercicioId);
+            if (ejercicioEl.classList.contains('active')) {
+                ejercicioEl.classList.remove('active');
+                document.querySelector(`#${ejercicioId} .ejercicio-header .toggle-icon`).textContent = '▼';
+            } else {
+                // Cerrar todos los ejercicios primero
+                document.querySelectorAll('.ejercicio-card.active').forEach(card => {
+                    card.classList.remove('active');
+                    card.querySelector('.toggle-icon').textContent = '▼';
+                });
+                
+                ejercicioEl.classList.add('active');
+                document.querySelector(`#${ejercicioId} .ejercicio-header .toggle-icon`).textContent = '▲';
+                
+                // Mostrar los pasos actuales
+                showCurrentStep(ejercicioId);
+                
+                // Desplazar a la vista
+                setTimeout(() => {
+                    ejercicioEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+
+        // Función para volver arriba
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Inicializar los ejercicios al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            // Mostrar el primer paso de cada ejercicio
+            Object.keys(ejercicios).forEach(ejercicioId => {
+                const ejercicio = document.getElementById(ejercicioId);
+                const content = ejercicio.querySelector('.ejercicio-content');
+                for (let i = 1; i <= ejercicios[ejercicioId].totalSteps; i++) {
+                    const step = document.getElementById(`${ejercicioId}-step${i}`);
+                    if (i === 1) {
+                        step.style.display = 'block';
+                    } else {
+                        step.style.display = 'none';
+                    }
+                }
+            });
+
+            // Comportamiento de enlaces de navegación
+            document.querySelectorAll('.ejercicio-link').forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const target = link.getAttribute('href').substring(1);
+                    toggleEjercicio(target);
+                });
+            });
+
+            // Mostrar/ocultar botón de volver arriba
+            window.addEventListener('scroll', () => {
+                const scrollToTopBtn = document.querySelector('.scroll-to-top');
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.style.display = 'flex';
+                } else {
+                    scrollToTopBtn.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
